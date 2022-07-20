@@ -1,0 +1,19 @@
+﻿@using EntityLayer.Concrete
+@model Student
+ @{ Layout = null; }
+<div class="tech-btm">
+    <ul class="list-group single">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><b>Student Id :</b> @Model.StudentId </span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+             <span><b>Name:</b> @String.Format("{0} {1}",Model.FirstName,Model.LastName)</span>
+        </li>
+         <li class="list-group-item d-flex justify-content-between align-items-center">
+           <span><b>Birth Date :</b> @Model.BirthDate.ToString("dd.MM.yyyy")</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+           <span><b>Course Info :</b> @String.Format("{0} - {1}",Model.Course?.CourseId,Model.Course?.CourseName)</span>
+        </li>
+    </ul>
+</div>

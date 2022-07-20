@@ -1,0 +1,125 @@
+﻿<style>
+    /*    .modal-dialog {
+        overflow-y: initial !important
+    }*/
+
+    /*.modal-body {
+        height: 80vh;
+        overflow-y: auto;
+    }*/
+
+</style>
+
+
+<div class="modal fade" id="GenericModalPartial" tabindex="-1" role="dialog" aria-labelledby="GenericModalLabel" aria-hidden="false">
+    <div class="modal-dialog" style=" width: 1000px;" id="modaldialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" style="margin-top:-20px" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="GenericModalPartialBody">
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+
+
+
+    function CloseModal() {
+        $("#GenericModalPartial").modal("hide");
+    }
+    function OpenGenericModal(url, title) {
+        var genericModalBody = $("#GenericModalPartialBody");
+        var titleHtml = $("#exampleModalLabel");
+        titleHtml.empty();
+        $.ajax({
+            type: 'GET',
+            url: url,
+            dataType: 'html',
+            beforeSend: function () {
+                genericModalBody.empty();
+                titleHtml.append(title);
+
+                genericModalBody.html('<div style="padding: 25px; text-align: center;"><img src="/Images/loading.gif"><br/>  Bilgiler yükleniyor...</div>');
+                $("#GenericModalPartial").modal("show");
+            },
+            success: function (data) {
+                if (data != null) {
+                    genericModalBody.html(data);
+
+                }
+            },
+            error: function (error) {
+                console.log("sonuc-error", error);
+            }
+        });
+    }
+
+
+    function ajaxBeginFormOnBegin(e) {
+        //loading start
+        Swal.fire({
+            title: 'İşlem devam ediyor!',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading()
+            }
+        });
+    }
+
+
+    function ajaxBeginFormOnComplete(e) {
+        //loading stop
+        Swal.close();
+    }
+
+
+    function ajaxBeginFormOnFailure(e) {
+        Swal.fire({ position: 'top-end', icon: 'error', title: " Başarısız ! ", showConfirmButton: true });
+    }
+
+
+    function ajaxBeginFormOnSuccess(xhr, id, btnId = null) {
+        var response = xhr.responseJSON;
+        console.log(response);
+        if (response.IsSuccess) {
+            $('.successAlertDiv').show();
+            $('.successAlertDiv .successMessage').html(response.Message);
+            if (response.Data.resultTypeID == 40) {
+                if (btnId != null && btnId == "btnSaveAndClose") {
+                    setTimeout(function () {
+                        hideModal();
+                        eval($('#' + id).data('reload'));
+                    }, 2000);
+                } else {
+                    eval($('#' + id).data('reload'));
+                }
+            } else {
+                window.location.reload();
+            }
+
+
+        } else {
+            $('.errorAlertDiv').show();
+            $('.errorAlertDiv .errorMessage').html(response.Message);
+        }
+    }
+
+
+    function hideModal() {
+        $('.modal.in').modal('hide');
+    }
+
+</script>

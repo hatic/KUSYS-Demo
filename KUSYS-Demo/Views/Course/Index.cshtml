@@ -1,0 +1,26 @@
+﻿@using EntityLayer.Concrete
+@model List<Student>
+@{
+    ViewData["Title"] = "Courses";
+}
+<table class="table table-bordered">
+    <tr>
+        <th>Course No</th>
+        <th>Course Name</th>
+        <th>Student Id</th>
+        <th>Student Name</th>
+        <th>Student Surname</th>
+    </tr>
+    @foreach (var course in Model)
+    {
+        <tr>
+            <td>@course.CourseId</td>
+            <td>@course.Course?.CourseName</td>
+            <td>@course.StudentId</td>
+            <td>@course.FirstName</td>
+            <td>@course.LastName</td>
+        </tr>
+    }
+</table>
+
+
